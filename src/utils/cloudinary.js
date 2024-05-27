@@ -27,3 +27,4 @@ const uploadOnCloudinary = async (localFlepath)=>
         }
     }
 
+export {uploadOnCloudinary}
