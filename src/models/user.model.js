@@ -56,6 +56,7 @@ const userSchema = new Schema({
     timestamps:true
 })
 
+// using middleware to do something before saving data 
 
 userSchema.pre("save", async function(next) {
     if(!this.isModified("password")) return next()
@@ -69,14 +70,32 @@ userSchema.methods.ispasswordcorrect = async function(password)
 }
 
 userSchema.methods.generateAcessToken = function(){
-    jwt.sign(
+    return jwt.sign(
         {
-            
+            _id: this._id,
+            email:this.email,
+            fullname:this.fullname,
+            username:this.username
+
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: process.env.ACCESS_TOKEN_SECRET_EXPIRY
         }
     )
 }
 
 userSchema.methods.generateRefreshToken = function(){
+    return jwt.sign(
+        {
+            _id: this._id,
+
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_SECRET_EXPIRY
+        }
+    )
     
 }
 
